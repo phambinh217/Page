@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Page;
+namespace Phambinh\Page;
 
 use Phambinh\Laravel\Database\Traits\Query;
 use Phambinh\Laravel\Database\Traits\Metable;
@@ -68,7 +68,7 @@ class Page extends Model implements Query
 
     public function author()
     {
-        return $this->beLongsTo('Phambinh\Cms\User\Models\User');
+        return $this->beLongsTo('Phambinh\Cms\User');
     }
 
     public function scopeOfQuery($query, $args = [])
