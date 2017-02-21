@@ -1,6 +1,6 @@
 {
     "name": "phambinh/page",
-    "description": "Phambinhcms news module",
+    "description": "Phambinhcms page module",
     "homepage": "https://github.com/phambinh217/page",
     "license": "MIT",
     "authors": [
@@ -14,5 +14,6 @@
             "Phambinh\\Page\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
