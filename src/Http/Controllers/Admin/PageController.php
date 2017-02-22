@@ -51,7 +51,7 @@ class PageController extends AdminController
                 break;
         }
 
-        if (!empty($page->slug)) {
+        if (empty($page->slug)) {
             $page->slug = str_slug($page->title);
         }
 
@@ -104,7 +104,7 @@ class PageController extends AdminController
                 break;
         }
 
-        if (!empty($page->slug)) {
+        if (empty($page->slug)) {
             $page->slug = str_slug($page->title);
         }
         

@@ -6,10 +6,11 @@ use Phambinh\Laravel\Database\Traits\Query;
 use Phambinh\Laravel\Database\Traits\Metable;
 use Phambinh\Laravel\Database\Traits\Model as PhambinhModel;
 use Illuminate\Database\Eloquent\Model;
+use Phambinh\Appearance\Support\Traits\NavigationMenu;
 
 class Page extends Model implements Query
 {
-    use PhambinhModel;
+    use PhambinhModel, NavigationMenu;
     
     protected $table = 'pages';
 
@@ -170,5 +171,18 @@ class Page extends Model implements Query
     public function markAsDisable()
     {
         $this->where('id', $this->id)->update(['status' => '0']);
+    }
+
+    public function menuUrl()
+    {
+        if (\Route::has('page.show')) {
+            return route('page.show', ['slug' => $this->slug, 'id' => $this->id]);
+        }
+        return url($this->slug);
+    }
+
+    public function menuTitle()
+    {
+        return $this->title;
     }
 }
