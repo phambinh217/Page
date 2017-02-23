@@ -2,9 +2,9 @@
 
 namespace Phambinh\Page;
 
-use Phambinh\Laravel\Database\Traits\Query;
-use Phambinh\Laravel\Database\Traits\Metable;
-use Phambinh\Laravel\Database\Traits\Model as PhambinhModel;
+use Phambinh\Cms\Support\Traits\Query;
+use Phambinh\Cms\Support\Traits\Metable;
+use Phambinh\Cms\Support\Traits\Model as PhambinhModel;
 use Illuminate\Database\Eloquent\Model;
 use Phambinh\Appearance\Support\Traits\NavigationMenu;
 use Phambinh\Cms\Support\Traits\Thumbnail;
