@@ -5,9 +5,9 @@ namespace Phambinh\Page;
 use Phambinh\Cms\Support\Traits\Query;
 use Phambinh\Cms\Support\Traits\Metable;
 use Phambinh\Cms\Support\Traits\Model as PhambinhModel;
-use Illuminate\Database\Eloquent\Model;
 use Phambinh\Appearance\Support\Traits\NavigationMenu;
 use Phambinh\Cms\Support\Traits\Thumbnail;
+use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model implements Query
 {
