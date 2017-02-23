@@ -7,7 +7,7 @@
  * @version: 1.0
  * @package: PhambinhCMS
  */
-namespace Packages\Page\Providers;
+namespace Phambinh\Page\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -54,8 +54,8 @@ class ModuleServiceProvider extends ServiceProvider
     public function register()
     {
         \Module::registerFromJsonFile('user', __DIR__ .'/../../module.json');
-        \Menu::registerType('Trang tĩnh', \Packages\Page\Page::class);
-        $this->app->register(\Packages\Page\Providers\RoutingServiceProvider::class);
+        \Menu::registerType('Trang tĩnh', \Phambinh\Page\Page::class);
+        $this->app->register(\Phambinh\Page\Providers\RoutingServiceProvider::class);
         $this->registerAdminMenu();
     }
 
