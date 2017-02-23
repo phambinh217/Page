@@ -7,10 +7,11 @@ use Phambinh\Laravel\Database\Traits\Metable;
 use Phambinh\Laravel\Database\Traits\Model as PhambinhModel;
 use Illuminate\Database\Eloquent\Model;
 use Phambinh\Appearance\Support\Traits\NavigationMenu;
+use Phambinh\Cms\Support\Traits\Thumbnail;
 
 class Page extends Model implements Query
 {
-    use PhambinhModel, NavigationMenu;
+    use PhambinhModel, NavigationMenu, Thumbnail;
     
     protected $table = 'pages';
 
@@ -120,15 +121,6 @@ class Page extends Model implements Query
         }
 
         return null;
-    }
-
-    public function thumbnailOrDefault()
-    {
-        if (! empty($this->thumbnail)) {
-            return $this->thumbnail;
-        }
-
-        return setting('default-thumbnail');
     }
 
     public static function statusAble()
