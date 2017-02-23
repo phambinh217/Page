@@ -55,7 +55,6 @@ class ModuleServiceProvider extends ServiceProvider
     {
         \Module::registerFromJsonFile('user', __DIR__ .'/../../module.json');
         \Menu::registerType('Trang tĩnh', \Phambinh\Page\Page::class);
-        $this->app->register(\Phambinh\Page\Providers\RoutingServiceProvider::class);
         $this->registerAdminMenu();
     }
 
