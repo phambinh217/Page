@@ -1,13 +1,13 @@
 <?php
 
-namespace Phambinh\Page;
+namespace Packages\Page;
 
-use Phambinh\Laravel\Database\Traits\Query;
-use Phambinh\Laravel\Database\Traits\Metable;
-use Phambinh\Laravel\Database\Traits\Model as PhambinhModel;
+use Packages\Cms\Support\Traits\Query;
+use Packages\Cms\Support\Traits\Metable;
+use Packages\Cms\Support\Traits\Model as PhambinhModel;
 use Illuminate\Database\Eloquent\Model;
-use Phambinh\Appearance\Support\Traits\NavigationMenu;
-use Phambinh\Cms\Support\Traits\Thumbnail;
+use Packages\Appearance\Support\Traits\NavigationMenu;
+use Packages\Cms\Support\Traits\Thumbnail;
 
 class Page extends Model implements Query
 {
@@ -70,7 +70,7 @@ class Page extends Model implements Query
 
     public function author()
     {
-        return $this->beLongsTo('Phambinh\Cms\User');
+        return $this->beLongsTo('Packages\Cms\User');
     }
 
     public function scopeOfQuery($query, $args = [])

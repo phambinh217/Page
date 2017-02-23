@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Phambinh\\Page\\": "src/"
+            "Packages\\Page\\": "src/"
         }
     },
     "minimum-stability": "dev",

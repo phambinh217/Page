@@ -42,7 +42,7 @@
 		                            <label class="control-label col-md-3">Trạng thái</label>
 		                            <div class="col-md-9">
 		                            	@include('Page::admin.components.form-select-status', [
-					                        'statuses' => Phambinh\Page\Page::statusAble(),
+					                        'statuses' => Packages\Page\Page::statusAble(),
 					                        'name' => 'status',
 					                        'selected' => isset($filter['status']) ? $filter['status'] : null,
 					                    ])
@@ -106,10 +106,10 @@
 							</div>
 						</th>
 						<th width="50" class="text-center">
-							{!! \Phambinh\Page\Page::linkSort('ID', 'id') !!}
+							{!! \Packages\Page\Page::linkSort('ID', 'id') !!}
 						</th>
 						<th>
-							{!! \Phambinh\Page\Page::linkSort('Tên trang tĩnh', 'title') !!}
+							{!! \Packages\Page\Page::linkSort('Tên trang tĩnh', 'title') !!}
 						</th>
 						<th>
 							Tác giả
