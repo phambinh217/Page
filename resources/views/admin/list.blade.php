@@ -160,9 +160,11 @@
 									</span>
 		                        </a>
 		                        <ul class="dropdown-menu pull-right">
-		                            <li><a href="{{ route('admin.page.show', ['id' => $page_item->id]) }}"><i class="fa fa-eye"></i> Xem</a></li>
+		                        	@if(Route::has('page.show'))
+		                            	<li><a href="{{ route('page.show', ['slug' => $page_item->slug, 'id' => $page_item->id]) }}"><i class="fa fa-eye"></i> Xem</a></li>
+		                            	<li role="presentation" class="divider"></li>
+		                            @endif
 
-		                            <li role="presentation" class="divider"> </li>
 		                            
 		                            @can('admin.page.edit', $page_item)
 			                            <li><a href="{{ route('admin.page.edit',['id' => $page_item->id]) }}"><i class="fa fa-pencil"></i> Sửa</a></li>
