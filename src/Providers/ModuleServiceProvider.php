@@ -39,10 +39,6 @@ class ModuleServiceProvider extends ServiceProvider
             include __DIR__ . '/../../helper/helper.php';
         }
 
-        $this->publishes([
-            __DIR__.'/../../assets' => public_path('assets'),
-        ], 'public');
-
         $this->registerPolices();
     }
 
