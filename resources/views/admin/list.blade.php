@@ -115,7 +115,7 @@
 							Tác giả
 						</th>
 						<th>
-							Ngày tạo
+							{!! \Phambinh\Page\Page::linkSort('Ngày cập nhật', 'updated_at') !!}
 						</th>
 						<th class="text-center">Thao tác</th>
 					</tr>
@@ -145,7 +145,7 @@
 							{{ $page_item->author->full_name }}
 						</td>
 						<td>
-							{{ text_time_difference($page_item->created_at) }}
+							{{ text_time_difference($page_item->updated_at) }}
 						</td>
 
 						<td>

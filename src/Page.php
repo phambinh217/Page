@@ -32,6 +32,8 @@ class Page extends Model implements Query
         'meta_title',
         'meta_description',
         'meta_keyword',
+        'created_at',
+        'updated_at',
     ];
 
      /**
@@ -55,7 +57,7 @@ class Page extends Model implements Query
      */
     protected static $defaultOfQuery = [
         'status'        => 'enable',
-        'orderby'        =>    'created_at.desc',
+        'orderby'        =>    'updated_at.desc',
     ];
 
     protected static $statusAble = [
@@ -75,6 +77,7 @@ class Page extends Model implements Query
 
     public function scopeOfQuery($query, $args = [])
     {
+        $args = $this->defaultParams($args);
         $query->baseQuery($args);
 
         if (! empty($args['status'])) {
@@ -165,7 +168,7 @@ class Page extends Model implements Query
         $this->where('id', $this->id)->update(['status' => '0']);
     }
 
-    public function menuUrl()
+    public function getMenuUrlAttribute()
     {
         if (\Route::has('page.show')) {
             return route('page.show', ['slug' => $this->slug, 'id' => $this->id]);
@@ -173,7 +176,7 @@ class Page extends Model implements Query
         return url($this->slug);
     }
 
-    public function menuTitle()
+    public function getMenuTitleAttribute()
     {
         return $this->title;
     }
