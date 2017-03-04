@@ -65,6 +65,8 @@ class Page extends Model implements Query
         ['slug' => 'enable', 'name' => 'Công khai'],
     ];
 
+    protected static $defaultStatus = 'enable';
+
     protected static $searchFields = [
         'news.id',
         'news.title',
@@ -117,7 +119,7 @@ class Page extends Model implements Query
         return $statusCode == '0';
     }
 
-    public function statusHtmlClass()
+    public function getHtmlClassAttribute()
     {
         if ($this->status == '0') {
             return 'bg-danger';
@@ -126,9 +128,14 @@ class Page extends Model implements Query
         return null;
     }
 
-    public static function statusAble()
+    public static function getStatusAble()
     {
         return self::$statusAble;
+    }
+
+    public static function getDefaultStatus()
+    {
+        return self::$defaultStatus;
     }
 
     public function scopeEnable($query)
@@ -153,11 +160,6 @@ class Page extends Model implements Query
         return $query->where('status', '0');
     }
 
-    public function scopePending($query)
-    {
-        return $query->where('status', '3');
-    }
-
     public function markAsEnable()
     {
         $this->where('id', $this->id)->update(['status' => '1']);
@@ -179,5 +181,32 @@ class Page extends Model implements Query
     public function getMenuTitleAttribute()
     {
         return $this->title;
+    }
+
+    public function setStatusAttribute($value)
+    {
+        switch ($value) {
+            case 'disable':
+                $this->attributes['status'] = '0';
+                break;
+
+            case 'enable':
+                $this->attributes['status'] = '1';
+                break;
+        }
+    }
+
+    public function getStatusSlugAttribute()
+    {
+        if (! is_null($this->status)) {
+            return $this->getStatusAble()[$this->status]['slug'];
+        }
+
+        return $this->getDefaultStatus();
+    }
+
+    public function getStatusNameAttribute()
+    {
+        return $this->getStatusAble()[$this->status]['name'];
     }
 }

@@ -92,10 +92,10 @@
                                 </label>
                                 <div class="col-sm-10">
                                     @include('Page::admin.components.form-select-status', [
-                                        'statuses' => $page->statusAble(),
+                                        'statuses' => $page->getStatusAble(),
                                         'class' => 'width-auto',
                                         'name' => 'page[status]',
-                                        'selected' => isset($page_id) ? ($page->status == 1 ? 'enable' : 'disable') : null,
+                                        'selected' => $page->status_slug,
                                     ])
                                 </div>
                             </div>
