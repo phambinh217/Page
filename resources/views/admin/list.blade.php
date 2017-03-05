@@ -142,7 +142,7 @@
 							@endcannot
 						</td>
 						<td>
-							{{ $page_item->author->full_name }}
+							<img class="img-circle" style="width: 30px;" src="{{ thumbnail_url($page_item->author->avatar, ['width' =>50, 'height' => 50]) }}" alt="" /> {{ $page_item->author->full_name }}
 						</td>
 						<td>
 							{{ text_time_difference($page_item->updated_at) }}
@@ -165,9 +165,9 @@
 		                            	<li role="presentation" class="divider"></li>
 		                            @endif
 
-		                            
 		                            @can('admin.page.edit', $page_item)
 			                            <li><a href="{{ route('admin.page.edit',['id' => $page_item->id]) }}"><i class="fa fa-pencil"></i> Sửa</a></li>
+			                            <li role="presentation" class="divider"></li>
 			                        @endcan
 		                        	
 		                        	@can('admin.page.disable', $page_item)

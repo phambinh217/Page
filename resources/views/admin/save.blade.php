@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="portlet-body form">
-            <form ajax-form-container method="post" action="{{ isset($page_id) ? admin_url('page/' . $page->id) : admin_url('page') }}" class="form-horizontal form-bordered form-row-stripped">
+            <form method="post" action="{{ isset($page_id) ? admin_url('page/' . $page->id) : admin_url('page') }}" class="form-horizontal form-bordered form-row-stripped ajax-form">
                 @if(isset($page_id))
                     <input type="hidden" name="_method" value="PUT" />
                 @endif
