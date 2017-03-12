@@ -20,6 +20,7 @@ class CreatePagesTable extends Migration {
 			$table->text('content')->nullable();
 			$table->text('sub_content', 65535)->nullable();
 			$table->integer('author_id')->default(-1);
+			$table->integer('parent_id')->default(0);
 			$table->boolean('status')->default(0);
 			$table->timestamps();
 			$table->string('thumbnail')->nullable();

@@ -1,11 +1,11 @@
 <?php
 
-namespace Phambinh\Page\Http\Controllers\Admin;
+namespace Packages\Page\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use AdminController;
 use Validator;
-use Phambinh\Page\Page;
+use Packages\Page\Page;
 
 class PageController extends AdminController
 {
@@ -13,19 +13,18 @@ class PageController extends AdminController
     {
         $filter = Page::getRequestFilter();
         $this->data['filter'] = $filter;
-        $this->data['pages'] = Page::ofQuery($filter)->with('author')->paginate($this->paginate);
+        $this->data['pages'] = Page::applyFilter($filter)->with('author')->paginate($this->paginate);
 
-        \Metatag::set('title', 'Tất cả trang tĩnh');
+        \Metatag::set('title', trans('page.list-page'));
         return view('Page::admin.list', $this->data);
     }
 
     public function create()
     {
-        \Metatag::set('title', 'Thêm trang tĩnh mới');
-
         $page = new Page();
         $this->data['page'] = $page;
         
+        \Metatag::set('title', trans('page.add-new-page'));
         return view('Page::admin.save', $this->data);
     }
 
@@ -39,36 +38,19 @@ class PageController extends AdminController
 
         $page = new Page();
 
-        $page->fill($request->page);
-        
-        switch ($page->status) {
-            case 'disable':
-                $page->status = '0';
-                break;
-
-            case 'enable':
-                $page->status = '1';
-                break;
-        }
-
-        if (empty($page->slug)) {
-            $page->slug = str_slug($page->title);
-        }
-
-        $page->author_id = \Auth::user()->id;
-        $page->save();
+        $page->fill($request->page)->save();
 
         if ($request->ajax()) {
             return response()->json([
-                'title'        =>    'Thành công',
-                'message'    =>    'Đã thêm trang tĩnh mới',
-                'redirect'    =>    isset($request->save_only) ?
+                'title'        =>    trans('cms.success'),
+                'message'    =>    trans('page.create-page-success'),
+                'redirect'    =>    $request->exists('save_only') ?
                     route('admin.page.edit', ['id' => $page->id]) :
                     route('admin.page.create'),
             ], 200);
         }
 
-        if (isset($request->save_only)) {
+        if ($request->exists('save_only')) {
             return redirect()->route('admin.page.edit', ['id' => $page->id]);
         }
 
@@ -80,7 +62,7 @@ class PageController extends AdminController
         $this->data['page_id'] = $page->id;
         $this->data['page']    = $page;
 
-        \Metatag::set('title', 'Chỉnh sửa trang tĩnh');
+        \Metatag::set('title', trans('page.edit-page'));
         return view('Page::admin.save', $this->data);
     }
 
@@ -92,38 +74,22 @@ class PageController extends AdminController
             'page.status'            =>    'required|in:enable,disable',
         ]);
 
-        $page->fill($request->page);
-
-        switch ($page->status) {
-            case 'disable':
-                $page->status = '0';
-                break;
-
-            case 'enable':
-                $page->status = '1';
-                break;
-        }
-
-        if (empty($page->slug)) {
-            $page->slug = str_slug($page->title);
-        }
-        
-        $page->save();
+        $page->fill($request->page)->save();
 
         if ($request->ajax()) {
             $response = [
-                'title'        =>    'Thành công',
-                'message'    =>    'Cập nhật tin thành công',
+                'title'        =>    trans('cms.success'),
+                'message'    =>    trans('page.update-page-success'),
             ];
-            if (isset($request->save_and_out)) {
-                $response['redirect'] = admin_url('page');
+            if ($request->exists('save_and_out')) {
+                $response['redirect'] = route('admin.page.index');
             }
 
             return response()->json($response, 200);
         }
         
-        if (isset($request->save_and_out)) {
-            return redirect(admin_url('page'));
+        if ($request->exists('save_and_out')) {
+            return redirect()->route('admin.page.index');
         }
                 
         return redirect()->back();
@@ -131,12 +97,11 @@ class PageController extends AdminController
 
     public function disable(Request $request, Page $page)
     {
-        $page->status = '0';
-        $page->save();
+        $page->markAsDisable();
         if ($request->ajax()) {
             return response()->json([
-                'title'            =>    'Thành công',
-                'message'        =>    'Đã ẩn tin',
+                'title'            =>    trans('cms.success'),
+                'message'        =>    trans('page.disable-page-success'),
             ], 200);
         }
 
@@ -145,12 +110,11 @@ class PageController extends AdminController
 
     public function enable(Request $request, Page $page)
     {
-        $page->status = '1';
-        $page->save();
+        $page->markAsEnable();
         if ($request->ajax()) {
             return response()->json([
-                'title'            =>    'Thành công',
-                'message'        =>    'Đã công khai tin',
+                'title'            =>    trans('cms.success'),
+                'message'        =>    trans('page.enable-page-success'),
             ], 200);
         }
 
@@ -163,8 +127,8 @@ class PageController extends AdminController
         
         if ($request->ajax()) {
             return response()->json([
-                'title'            =>    'Thành công',
-                'message'        =>    'Đã xóa tin',
+                'title'            =>    trans('cms.success'),
+                'message'        =>    trans('page.destroy-page-success'),
             ], 200);
         }
 

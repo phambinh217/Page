@@ -5,7 +5,7 @@
  * Description: Helper functions of module page
  * @author: noname
  * @version: 1.0
- * @package: PhambinhCMS
+ * @package: PackagesCMS
  */
 
 if (! function_exists('my_function')) {

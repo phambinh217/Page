@@ -6,9 +6,9 @@
  * to use, you have to uncommnet it
  * @author: noname
  * @version: 1.0
- * @package: PhambinhCMS
+ * @package: PackagesCMS
  */
-Route::group(['module' => 'page', 'namespace' => 'Phambinh\Page\Http\Controllers\Admin', 'middleware' => ['web'], 'prefix' => 'admin/page'], function () {
+Route::group(['module' => 'page', 'namespace' => 'Packages\Page\Http\Controllers\Admin', 'middleware' => ['web'], 'prefix' => 'admin/page'], function () {
     Route::get('/', 'PageController@index')->name('admin.page.index');
     Route::get('create', 'PageController@create')->name('admin.page.create');
     Route::post('/', 'PageController@store')->name('admin.page.store');

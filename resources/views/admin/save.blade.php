@@ -1,21 +1,21 @@
 @extends('Cms::layouts.default',[
 	'active_admin_menu' 	=> ['page', isset($page_id) ? 'page.index' : 'page.create'],
 	'breadcrumbs' 			=> [
-		'title'	=> ['Trang tĩnh', isset($page_id) ? 'Chỉnh sửa' : 'Thêm mới'],
+		'title'	=> [trans('page.page'), isset($page_id) ? trans('cms.edit') : trans('cms.add-new')],
 		'url'	=> [
-			admin_url('page')
+			route('admin.page.index')
 		],
 	],
 ])
 
-@section('page_title', isset($page_id) ? 'Chỉnh sửa trang tĩnh' : 'Thêm trang tĩnh mới')
+@section('page_title', isset($page_id) ? trans('page.edit-page') : trans('add-new-page'))
 
 @if(isset($page_id))
     @section('page_sub_title', $page->title)
     @can('admin.page.create')
         @section('tool_bar')
             <a href="{{ route('admin.page.create') }}" class="btn btn-primary">
-                <i class="fa fa-plus"></i> <span class="hidden-xs">Thêm trang tĩnh mới</span>
+                <i class="fa fa-plus"></i> <span class="hidden-xs">@lang('add-new-page')</span>
             </a>
         @endsection
     @endcan
@@ -27,28 +27,28 @@
             <div class="tab-default">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#page-content" data-toggle="tab" aria-expanded="true"> Nội dung </a>
+                        <a href="#page-content" data-toggle="tab" aria-expanded="true"> @lang('page.content') </a>
                     </li>
                     <li class="">
-                        <a href="#page-data" data-toggle="tab" aria-expanded="false"> Dữ liệu </a>
+                        <a href="#page-data" data-toggle="tab" aria-expanded="false"> @lang('data') </a>
                     </li>
                     <li class="">
-                        <a href="#page-seo" data-toggle="tab" aria-expanded="false"> SEO </a>
+                        <a href="#page-seo" data-toggle="tab" aria-expanded="false"> @lang('seo') </a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="portlet-body form">
-            <form method="post" action="{{ isset($page_id) ? admin_url('page/' . $page->id) : admin_url('page') }}" class="form-horizontal form-bordered form-row-stripped ajax-form">
-                @if(isset($page_id))
-                    <input type="hidden" name="_method" value="PUT" />
-                @endif
-                {{ csrf_field() }}
+            <form method="post" action="{{ isset($page_id) ? admin_url('page/' . $page->id) : route('admin.page.index') }}" class="form-horizontal form-bordered form-row-stripped ajax-form">
+            {!! Form::ajax([
+                'url' => isset($page_id) ? route('admin.page.update', ['id' => $page_id]) : route('admin.page.store'),
+                'method' => isset($page_id) ? 'PUT' : 'POST',
+            ]) !!}
                 <div class="form-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="page-content">
                             <div class="form-group">
-                                <label class="control-label col-sm-2">Tên tin</label>
+                                <label class="control-label col-sm-2">@lang('page.title')</label>
                                 <div class="col-sm-10">
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -58,7 +58,7 @@
                                             <input type="text" name="page[slug]" value="{{ $page->slug }}" placeholder="Slug" class="form-control str-slug" value="{{ $page->slug or '' }}" />
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" value="true" checked="" id="create-slug">
-                                                Từ tên tin
+                                                @lang('page.from-page-title')
                                             </label>
                                         </div>
                                     </div>
@@ -66,44 +66,37 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">
-                                    Nội dung<span class="required">*</span>
+                                    @lang('page.content') <span class="required">*</span>
                                 </label>
                                 <div class="col-md-10">
-                                    <textarea name="page[content]" class="form-control texteditor">{{ $page->content }}</textarea>
+                                    {!! Form::tinymce('page[content]', $page->content) !!}
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="page-data">
                             <div class="form-group media-box-group">
                                 <label class="control-label col-md-2">
-                                    Thumbnail
+                                    @lang('cms.thumbnail')
                                 </label>
                                 <div class="col-sm-10">
-                                    @include('Cms::components.form-chose-media', [
-                                        'name'              => 'page[thumbnail]',
-                                        'value'             => old('page.thumbnail', $page->thumbnail),
-                                        'url_image_preview' => old('page.thumbnail', thumbnail_url($page->thumbnail, ['width' => '100', 'height' => '100']))
-                                    ])
+                                    {!! Form::btnMediaBox('page[thumbnail]', $page->thumbnail, thumbnail_url($page->thumbnail, ['width' => '100', 'height' => '100'])) !!}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-2">
-                                    Trạng thái <span class="required">*</span>
+                                    @lang('page.status') <span class="required">*</span>
                                 </label>
                                 <div class="col-sm-10">
-                                    @include('Page::admin.components.form-select-status', [
-                                        'statuses' => $page->getStatusAble(),
-                                        'class' => 'width-auto',
-                                        'name' => 'page[status]',
-                                        'selected' => $page->status_slug,
-                                    ])
+                                    {!! Form::select('page[status]', \Packages\Page\Page::statusable()->mapWithKeys(function ($item) {
+                                        return [$item['slug'] => $item['name']];
+                                    })->all(), $page->status_slug, ['class' => 'form-control width-auto', 'placeholder' => '']) !!}
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="page-seo">
                             <div class="form-group">
                                 <label class="control-label col-md-2">
-                                    Meta title
+                                    @lang('cms.meta-title')
                                 </label>
                                 <div class="col-md-10">
                                     <input type="text" name="page[meta_title]" class="form-control" value="{{ $page->meta_title }}" />
@@ -111,7 +104,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">
-                                    Meta description
+                                    @lang('cms.meta-description')
                                 </label>
                                 <div class="col-md-10">
                                     <textarea class="form-control" name="page[meta_description]">{{ $page->meta_description }}</textarea>
@@ -119,7 +112,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">
-                                    Meta keyword
+                                    @lang('cms.meta-keyword')
                                 </label>
                                 <div class="col-md-10">
                                     <input type="text" name="page[meta_keyword]" class="form-control" value="{{ $page->meta_keyword }}" />
@@ -132,27 +125,19 @@
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
                             @if(!isset($page_id))
-                                @include('Cms::components.btn-save-new')
+                                {!! Form::btnSaveNew() !!}
                             @else
-                                @include('Cms::components.btn-save-out')
+                                {!! Form::btnSaveOut() !!}
                             @endif
                         </div>
                     </div>
                 </div>
-            </form>
+            {!! Form::close() !!}
         </div>
     </div>
 @endsection
 
-@push('css')
-    <link href="{{ asset_url('admin', 'global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset_url('admin', 'global/plugins/bootstrap-fileinput/bootstrap-fileinput.css') }}" rel="stylesheet" type="text/css" />
-@endpush
-
 @push('js_footer')
-    <script type="text/javascript" src="{{ asset_url('admin', 'global/plugins/jquery-form/jquery.form.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset_url('admin', 'global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset_url('admin', 'global/plugins/tinymce/tinymce.min.js')}} "></script>
     <script type="text/javascript">
         $(function(){
             $('#create-slug').click(function() {

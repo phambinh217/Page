@@ -1,19 +1,23 @@
 <?php
 
-namespace Phambinh\Page;
+namespace Packages\Page;
 
-use Phambinh\Cms\Support\Traits\Query;
-use Phambinh\Cms\Support\Traits\Metable;
-use Phambinh\Cms\Support\Traits\Model as PhambinhModel;
-use Phambinh\Appearance\Support\Traits\NavigationMenu;
-use Phambinh\Cms\Support\Traits\Thumbnail;
 use Illuminate\Database\Eloquent\Model;
+use Packages\Appearance\Support\Traits\NavigationMenu;
+use Packages\Cms\Support\Traits\Thumbnail;
+use Packages\Cms\Support\Traits\Filter;
+use Packages\Cms\Support\Traits\Status;
+use Packages\Cms\Support\Traits\Slug;
+use Packages\Cms\Support\Traits\Author;
+use Packages\Cms\Support\Traits\Hierarchical;
 
-class Page extends Model implements Query
+class Page extends Model
 {
-    use PhambinhModel, NavigationMenu, Thumbnail;
+    use Filter, NavigationMenu, Thumbnail, Status, Slug, Author, Hierarchical;
     
     protected $table = 'pages';
+
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -28,12 +32,9 @@ class Page extends Model implements Query
         'author_id',
         'status',
         'thumbnail',
-        'created_at',
         'meta_title',
         'meta_description',
         'meta_keyword',
-        'created_at',
-        'updated_at',
     ];
 
      /**
@@ -41,13 +42,11 @@ class Page extends Model implements Query
      *
      * @var array
      */
-    protected static $requestFilter = [
-        'id' => '',
-        'title' => '',
-        'status' => 'in:pending,enable,disable',
-        'time_status' => 'in:coming,enable,disable',
-        'orderby' => '',
-        '_keyword' => '',
+    protected static $filterable = [
+        'id'            => 'integer',
+        'title'         => 'max:255',
+        'status'        => 'in:enable,disable',
+        'author_id'     => 'integer',
     ];
 
     /**
@@ -55,32 +54,23 @@ class Page extends Model implements Query
      *
      * @var array
      */
-    protected static $defaultOfQuery = [
+    protected static $defaultFilter = [
         'status'        => 'enable',
-        'orderby'        =>    'updated_at.desc',
+        '_orderby'      => 'updated_at',
+        '_sort'         => 'desc',
     ];
 
-    protected static $statusAble = [
-        ['slug' => 'disable', 'name' => 'Xóa tạm'],
-        ['slug' => 'enable', 'name' => 'Công khai'],
-    ];
-
-    protected static $defaultStatus = 'enable';
-
-    protected static $searchFields = [
-        'news.id',
-        'news.title',
-    ];
+    protected $searchable = ['id', 'title', 'content', 'meta_keyword'];
 
     public function author()
     {
-        return $this->beLongsTo('Phambinh\Cms\User');
+        return $this->beLongsTo('Packages\Cms\User');
     }
 
-    public function scopeOfQuery($query, $args = [])
+    public function scopeApplyFilter($query, $args = [])
     {
-        $args = $this->defaultParams($args);
-        $query->baseQuery($args);
+        $args = array_merge(self::$defaultFilter, $args);
+        $query->baseFilter($args);
 
         if (! empty($args['status'])) {
             switch ($args['status']) {
@@ -94,10 +84,6 @@ class Page extends Model implements Query
             }
         }
 
-        if (! empty($args['_keyword'])) {
-            $query->querySearch($args['_keyword']);
-        }
-
         if (! empty($args['author_id'])) {
             $query->where('author_id', $args['author_id']);
         }
@@ -105,69 +91,6 @@ class Page extends Model implements Query
         if (! empty($args['title'])) {
             $query->where('title', $args['title']);
         }
-    }
-
-    public function isEnable()
-    {
-        $statusCode = $this->status;
-        return $statusCode == '1';
-    }
-
-    public function isDisable()
-    {
-        $statusCode = $this->status;
-        return $statusCode == '0';
-    }
-
-    public function getHtmlClassAttribute()
-    {
-        if ($this->status == '0') {
-            return 'bg-danger';
-        }
-
-        return null;
-    }
-
-    public static function getStatusAble()
-    {
-        return self::$statusAble;
-    }
-
-    public static function getDefaultStatus()
-    {
-        return self::$defaultStatus;
-    }
-
-    public function scopeEnable($query)
-    {
-        return $query->where('status', '1');
-    }
-
-    public function scopeSearch($query, $keyword)
-    {
-        $keyword = str_keyword($keyword);
-        foreach (self::$searchFields as $index => $field) {
-            if ($index == 0) {
-                $query->where($field, 'like', $keyword);
-            } else {
-                $query->orWhere($field, 'like', $keyword);
-            }
-        }
-    }
-
-    public function scopeDisable($query)
-    {
-        return $query->where('status', '0');
-    }
-
-    public function markAsEnable()
-    {
-        $this->where('id', $this->id)->update(['status' => '1']);
-    }
-
-    public function markAsDisable()
-    {
-        $this->where('id', $this->id)->update(['status' => '0']);
     }
 
     public function getMenuUrlAttribute()
@@ -181,32 +104,5 @@ class Page extends Model implements Query
     public function getMenuTitleAttribute()
     {
         return $this->title;
-    }
-
-    public function setStatusAttribute($value)
-    {
-        switch ($value) {
-            case 'disable':
-                $this->attributes['status'] = '0';
-                break;
-
-            case 'enable':
-                $this->attributes['status'] = '1';
-                break;
-        }
-    }
-
-    public function getStatusSlugAttribute()
-    {
-        if (! is_null($this->status)) {
-            return $this->getStatusAble()[$this->status]['slug'];
-        }
-
-        return $this->getDefaultStatus();
-    }
-
-    public function getStatusNameAttribute()
-    {
-        return $this->getStatusAble()[$this->status]['name'];
     }
 }
