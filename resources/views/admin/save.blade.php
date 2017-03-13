@@ -30,10 +30,10 @@
                         <a href="#page-content" data-toggle="tab" aria-expanded="true"> @lang('page.content') </a>
                     </li>
                     <li class="">
-                        <a href="#page-data" data-toggle="tab" aria-expanded="false"> @lang('data') </a>
+                        <a href="#page-data" data-toggle="tab" aria-expanded="false"> @lang('page.data') </a>
                     </li>
                     <li class="">
-                        <a href="#page-seo" data-toggle="tab" aria-expanded="false"> @lang('seo') </a>
+                        <a href="#page-seo" data-toggle="tab" aria-expanded="false"> @lang('page.seo') </a>
                     </li>
                 </ul>
             </div>
