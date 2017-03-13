@@ -1,15 +1,15 @@
 <?php
 
-namespace Packages\Page;
+namespace Phambinh\Page;
 
 use Illuminate\Database\Eloquent\Model;
-use Packages\Appearance\Support\Traits\NavigationMenu;
-use Packages\Cms\Support\Traits\Thumbnail;
-use Packages\Cms\Support\Traits\Filter;
-use Packages\Cms\Support\Traits\Status;
-use Packages\Cms\Support\Traits\Slug;
-use Packages\Cms\Support\Traits\Author;
-use Packages\Cms\Support\Traits\Hierarchical;
+use Phambinh\Appearance\Support\Traits\NavigationMenu;
+use Phambinh\Cms\Support\Traits\Thumbnail;
+use Phambinh\Cms\Support\Traits\Filter;
+use Phambinh\Cms\Support\Traits\Status;
+use Phambinh\Cms\Support\Traits\Slug;
+use Phambinh\Cms\Support\Traits\Author;
+use Phambinh\Cms\Support\Traits\Hierarchical;
 
 class Page extends Model
 {
@@ -64,7 +64,7 @@ class Page extends Model
 
     public function author()
     {
-        return $this->beLongsTo('Packages\Cms\User');
+        return $this->beLongsTo('Phambinh\Cms\User');
     }
 
     public function scopeApplyFilter($query, $args = [])

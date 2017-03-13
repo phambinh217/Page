@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">@lang('page.status')</label>
                         <div class="col-md-9">
-                        	{!! Form::select('status', \Packages\Page\Page::statusable()->mapWithKeys(function ($item) {
+                        	{!! Form::select('status', \Phambinh\Page\Page::statusable()->mapWithKeys(function ($item) {
 								return [$item['slug'] => $item['name']];
 							})->all(), isset($filter['status']) ? $filter['status'] : NULL, ['class' => 'form-control', 'placeholder' => '']) !!}
                         </div>
@@ -62,16 +62,16 @@
 				{!! Form::icheck(null, null, ['class' => 'check-all']) !!}
 			</th>
 			<th width="50" class="text-center">
-				{!! \Packages\Page\Page::linkSort(trans('id'), 'id') !!}
+				{!! \Phambinh\Page\Page::linkSort(trans('page.id'), 'id') !!}
 			</th>
 			<th>
-				{!! \Packages\Page\Page::linkSort(trans('title'), 'title') !!}
+				{!! \Phambinh\Page\Page::linkSort(trans('page.title'), 'title') !!}
 			</th>
 			<th>
 				@lang('page.author')
 			</th>
 			<th>
-				{!! \Packages\Page\Page::linkSort(trans('date_update'), 'updated_at') !!}
+				{!! \Phambinh\Page\Page::linkSort(trans('page.date_update'), 'updated_at') !!}
 			</th>
 			<th class="text-center"></th>
 		@endslot

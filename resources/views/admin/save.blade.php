@@ -87,7 +87,7 @@
                                     @lang('page.status') <span class="required">*</span>
                                 </label>
                                 <div class="col-sm-10">
-                                    {!! Form::select('page[status]', \Packages\Page\Page::statusable()->mapWithKeys(function ($item) {
+                                    {!! Form::select('page[status]', \Phambinh\Page\Page::statusable()->mapWithKeys(function ($item) {
                                         return [$item['slug'] => $item['name']];
                                     })->all(), $page->status_slug, ['class' => 'form-control width-auto', 'placeholder' => '']) !!}
                                 </div>

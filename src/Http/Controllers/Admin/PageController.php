@@ -1,11 +1,11 @@
 <?php
 
-namespace Packages\Page\Http\Controllers\Admin;
+namespace Phambinh\Page\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use AdminController;
 use Validator;
-use Packages\Page\Page;
+use Phambinh\Page\Page;
 
 class PageController extends AdminController
 {
