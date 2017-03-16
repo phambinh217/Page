@@ -8,7 +8,7 @@
 	],
 ])
 
-@section('page_title', isset($page_id) ? trans('page.edit-page') : trans('add-new-page'))
+@section('page_title', isset($page_id) ? trans('page.edit-page') : trans('page.add-new-page'))
 
 @if(isset($page_id))
     @section('page_sub_title', $page->title)

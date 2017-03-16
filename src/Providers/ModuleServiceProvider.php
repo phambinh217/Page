@@ -42,7 +42,7 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        \Module::registerFromJsonFile('user', __DIR__ .'/../../module.json');
+        \Module::registerFromComposerJson(__DIR__.'/../..');
         \Menu::registerType('Trang tĩnh', \Phambinh\Page\Page::class);
         $this->registerAdminMenu();
     }
