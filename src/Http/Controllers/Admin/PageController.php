@@ -38,7 +38,9 @@ class PageController extends AdminController
 
         $page = new Page();
 
-        $page->fill($request->page)->save();
+        $page->fill($request->page);
+        $page->author_id = \Auth::user()->id;
+        $page->save();
 
         if ($request->ajax()) {
             return response()->json([
