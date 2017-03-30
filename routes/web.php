@@ -1,6 +1,6 @@
 <?php 
 
-Route::group(['package' => 'page', 'middleware' => ['web'], 'prefix' => 'admin/page'], function () {
+Route::group(['package' => 'page', 'middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admin/page'], function () {
     Route::get('/', 'PageController@index')->name('admin.page.index');
     Route::get('create', 'PageController@create')->name('admin.page.create');
     Route::post('/', 'PageController@store')->name('admin.page.store');

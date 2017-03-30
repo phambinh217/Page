@@ -16,9 +16,6 @@ class ModuleServiceProvider extends ServiceProvider
         // Load views
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'Page');
 
-        // Load translations
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'Page');
-
         // Load helper
         if (\File::exists(__DIR__ . '/../../helper/helper.php')) {
             include __DIR__ . '/../../helper/helper.php';
